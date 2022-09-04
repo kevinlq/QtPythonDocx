@@ -1,0 +1,106 @@
+{
+    "savePath": "D:/test-20220903.docx",
+    "openFile": true,
+    "line_spacing": 1.5,
+    "header": "这是页眉",
+    "footer": "这是页脚",
+    "content": [
+        {
+            "type": "0",
+            "text": "这个是测试标题",
+            "level": 1,
+            "style": "",
+            "bold": true,
+            "italic": false,
+            "strike": false,
+            "alignment": "center"
+        },
+        {
+            "type": "0",
+            "text": "一、概述",
+            "level": 2,
+            "style": "",
+            "bold": true,
+            "italic": false,
+            "strike": false,
+            "alignment": "left"
+        },
+        {
+            "type": "1",
+            "text": "这个实例演示了如何通过 C++ 调用 python 生成 word 文档，数据交互采用 JSON 格式，数据顺序使用 JSON 数组，数据内容顺序取决于你传入的数组顺序。",
+            "level": 3,
+            "style": "",
+            "bold": false,
+            "italic": false,
+            "strike": false,
+            "line_spacing": 1.5
+        },
+        {
+            "type": "0",
+            "text": "二、演示表格数据交互",
+            "level": 2,
+            "style": "",
+            "bold": true,
+            "italic": false,
+            "strike": false,
+            "alignment": "left"
+        },
+        {
+            "type": "3",
+            "text": "",
+            "level": 3,
+            "style": "",
+            "bold": false,
+            "italic": false,
+            "strike": false,
+            "columns": 2,
+            "rows": 4,
+            "tableCell": [
+                {"text": "我是第一个单元格,加粗，倾斜", "style": "", "bold": true, "italic": true},{"text": "02", "style": "", "bold": false, "italic": false},
+                {"text": "03", "style": "", "bold": false, "italic": false},{"text": "04", "style": "", "bold": false, "italic": false},
+                {"text": "05", "style": "", "bold": false, "italic": false},{"text": "06", "style": "", "bold": false, "italic": false},
+                {"text": "07", "style": "", "bold": false, "italic": false},{"text": "08", "style": "", "bold": false, "italic": false}
+            ]
+        },
+        {
+            "type": "0",
+            "text": "三、演示插入图片",
+            "level": 2,
+            "style": "",
+            "bold": true,
+            "italic": false,
+            "strike": false,
+            "alignment": "left"
+        },
+        {
+            "type": "2",
+            "text": "",
+            "level": 0,
+            "style": "",
+            "bold": false,
+            "italic": false,
+            "strike": false,
+            "picture": "D:/title.jpg"
+        },
+        {
+            "type": "0",
+            "text": "四、结论",
+            "level": 2,
+            "style": "",
+            "bold": true,
+            "italic": false,
+            "strike": false,
+            "alignment": "left"
+        },
+         {
+            "type": "1",
+            "text": "可以看出来，写入 word 是一件非常容易的事情，使用 python 编程真的很简单，可以让我年轻好几年，人生苦短，多用 python。",
+            "level": 3,
+            "style": "",
+            "bold": false,
+            "italic": false,
+            "strike": false,
+            "line_spacing": 1.5
+        }
+    ]
+}
