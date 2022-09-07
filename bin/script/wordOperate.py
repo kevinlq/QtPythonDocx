@@ -52,6 +52,10 @@ def generateWord(strContent):
 
         if itemData['type'] == '0':
             # 标题处理
+            color = globalStyleDictionary['fontColor']
+            if ('color' in itemData.keys()):
+                color = hex_to_RGB(itemData['color'])
+
             para_heading = document.add_heading('', level=itemData['level'])
             headingRun = para_heading.add_run(itemData['text'])
             para_heading.alignment = converAlignment(itemData['alignment'])
@@ -60,7 +64,7 @@ def generateWord(strContent):
             headingRun.font.name = globalStyleDictionary['fontName']
             headingRun.font.strike = itemData['strike']
             headingRun._element.rPr.rFonts.set(qn('w:eastAsia'), globalStyleDictionary['fontName'])
-            headingRun.font.color.rgb = globalStyleDictionary['fontColor']
+            headingRun.font.color.rgb = color
         elif itemData['type'] == '1':
             # 普通文本处理
             #document.add_paragraph('')
@@ -72,9 +76,19 @@ def generateWord(strContent):
             # 下面的代码是为了首行缩进 2 字符
             paragraph.style.font.size = Pt(globalStyleDictionary['fontSize'])
             paragraph.paragraph_format.first_line_indent = paragraph.style.font.size * 2
+
+            # 设置段前段后间距信息
+            space_before = globalStyleDictionary['space_before']
+            space_after = globalStyleDictionary['space_after']
+
+            if('space_before' in itemData.keys()):
+                space_before = itemData['space_before']
+            if('space_after' in itemData.keys()):
+                space_after = itemData['space_after']
+
             paragraph.paragraph_format.line_spacing = line_spacing
-            paragraph.paragraph_format.space_before  = Pt(globalStyleDictionary['space_before'])  # 段前
-            paragraph.paragraph_format.space_after = Pt(globalStyleDictionary['space_after'])     # 段后
+            paragraph.paragraph_format.space_before  = Pt(space_before)  # 段前
+            paragraph.paragraph_format.space_after = Pt(space_after)     # 段后
         elif itemData['type'] == '2':
             # 图片处理
             document.add_paragraph('')
@@ -108,6 +122,7 @@ def generateWord(strContent):
                     cellRun = cellGraph.runs[0]                   
                     cellRun.font.bold = tableCellArray[itemIndex]['bold']
                     cellRun.font.italic = tableCellArray[itemIndex]['italic']
+                    cellRun.font.color.rgb = hex_to_RGB(tableCellArray[itemIndex]['color'])
         else:
             document.add_paragraph('')
             paragraph = document.add_paragraph(itemData['text'])
@@ -130,7 +145,15 @@ def converAlignment(strType):
         return WD_ALIGN_PARAGRAPH.JUSTIFY
     return WD_ALIGN_PARAGRAPH.LEFT
 
+
+# 16进制颜色格式颜色转换为RGB格式
+def hex_to_RGB(hex):
+    r = int(hex[1:3],16)
+    g = int(hex[3:5],16)
+    b = int(hex[5:7], 16)
+    return RGBColor(r, g, b)
+
 # 测试
-#inputFile = open('test.json', encoding='utf-8')
-#exportData = json.loads(inputFile.read())
-#generateWord(json.dumps(exportData))
+inputFile = open('test.json', encoding='utf-8')
+exportData = json.loads(inputFile.read())
+generateWord(json.dumps(exportData))

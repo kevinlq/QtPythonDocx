@@ -18,10 +18,13 @@ struct DS_ItemData
     QString type = "0";
     QString picture = "";
     QString alignment = "left";
+    QString color = "#000000";
     bool bold = false;
     bool italic = false;
     bool strike = false;
     int level = 5;
+    double space_after = 15;
+    double space_before = 15;
 
     virtual QVariantMap toVariantMap();
 };
@@ -43,7 +46,10 @@ QVariantMap DS_ItemData::toVariantMap()
     map["italic"] = italic;
     map["strike"] = strike;
     map["alignment"] = alignment;
+    map["color"]    = color;
     map["picture"] = picture;
+    map["space_after"] = space_after;
+    map["space_after"] = space_after;
 
     return map;
 }
@@ -89,6 +95,7 @@ QVariantMap DS_TableData::toVariantMap()
 MainWidget::MainWidget(QWidget *parent)
     : QWidget{parent}
 {
+    setWindowTitle("QtPythonDocx by kevinlq(微信公众号:devstone)");
     QVBoxLayout *pMainLayout = new QVBoxLayout;
 
     QGridLayout *pGridLayout = new QGridLayout;
@@ -100,8 +107,9 @@ MainWidget::MainWidget(QWidget *parent)
     pGridLayout->addWidget(m_pTitle, 1, 0, 1, 1);
 
     pMainLayout->addLayout(pGridLayout);
+    QString strText = "这个示例演示了如何通过C++调用python来生成word文档,数据交互采用JSON格式。使用者完全不用关心python 是怎么被调用的，就像正常调用C++函数一样非常简单，这样我们只需要关注具体内容即可";
 
-    m_pText1 = new QTextEdit("这个示例演示了如何通过C++调用python来生成word文档,数据交互采用JSON格式", this);
+    m_pText1 = new QTextEdit(strText, this);
     m_pText1->setMinimumHeight(60);
     pGridLayout->addWidget(m_pText1, 2, 0, 1, 1);
 
@@ -109,7 +117,8 @@ MainWidget::MainWidget(QWidget *parent)
     m_pTableView->setMinimumHeight(400);
     pGridLayout->addWidget(m_pTableView, 3, 0, 1, 1);
 
-    m_pText2 = new QTextEdit("这是测试段落", this);
+    strText = "人生苦短，我用C++和Python";
+    m_pText2 = new QTextEdit(strText, this);
     m_pText2->setMinimumHeight(60);
     pGridLayout->addWidget(m_pText2, 4, 0, 1, 1);
 
@@ -168,43 +177,54 @@ void MainWidget::onExportButtonClicked()
         int nRows = 4;
         int nColumns = 2;
 
-        DS_TableData *pTableData = new DS_TableData;
-        pTableData->type = "3";
-        pTableData->text = "";
-        pTableData->columns = nColumns;
-        pTableData->rows = nRows;
-
-        for(int r = 0; r < nRows; r++)
+        QString strText = QString("下面演示创建%1行%2列表格，每个单元格样式都可以自定义，只需要配置具体样式即可").arg(nRows).arg(nColumns);
         {
-            for(int c = 0; c < nColumns; c++)
+            DS_ItemData *pTextTable = new DS_ItemData(strText, "1", "", "left", false, false, false, 3);
+            pTextTable->space_after = 5;
+            contentList << pTextTable;
+
+            DS_TableData *pTableData = new DS_TableData;
+            pTableData->type = "3";
+            pTableData->text = "";
+            pTableData->columns = nColumns;
+            pTableData->rows = nRows;
+
+            for(int r = 0; r < nRows; r++)
             {
-                int index = r*nColumns + c;
-                bool bold = false;
-                bool italic = false;
-                QString text = QString("单元格 %1").arg(index+1);
-
-                if(index == 0)
+                for(int c = 0; c < nColumns; c++)
                 {
-                    text = QString("单元格 %1,加粗、倾斜").arg(index+1);
-                    bold = true;
-                    italic = true;
-                }
+                    DS_ItemData itemData;
+                    itemData.bold = false;
+                    itemData.italic = false;
+                    itemData.level = 5;
 
-                DS_ItemData itemData;
-                itemData.text = text;
-                itemData.bold = bold;
-                itemData.italic = italic;
-                itemData.level = 5;
-                pTableData->cellItems.push_back(itemData);
+                    int index = r*nColumns + c;
+                    QString text = QString("单元格 %1").arg(index+1);
+
+                    if(index == 0)
+                    {
+                        text = QString("单元格 %1,加粗、倾斜、红色").arg(index+1);
+                        itemData.bold = true;
+                        itemData.italic = true;
+                        itemData.color = "#ff0000";
+                    }
+
+                    itemData.text = text;
+                    pTableData->cellItems.push_back(itemData);
+                }
             }
+            contentList << pTableData;
         }
 
-        contentList << pTableData;
-
-        DS_ItemData *heading4 = new DS_ItemData("三.插入图片", "0", "", "left", true, false, false, 2);
-        contentList << heading4;
-        DS_ItemData *pictureItem = new DS_ItemData("", "2", "title.png", "left", false, false, false, 2);
-        contentList << pictureItem;
+        {
+            DS_ItemData *heading4 = new DS_ItemData("三.插入图片", "0", "", "left", true, false, false, 2);
+            contentList << heading4;
+            QString strText = QString("下面演示了如何插入图片，目前图片支持相对路径和绝对路劲，可以根据自己需要在json对应字段传入，如片大小支持手动设置，示例中写了固定值");
+            DS_ItemData *pText = new DS_ItemData(strText, "1", "", "left", false, false, false, 3);
+            contentList << pText;
+            DS_ItemData *pictureItem = new DS_ItemData("", "2", "title.png", "left", false, false, false, 2);
+            contentList << pictureItem;
+        }
 
         DS_ItemData *heading5 = new DS_ItemData("四.总结", "0", "", "left", true, false, false, 2);
         contentList << heading5;

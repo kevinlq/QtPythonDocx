@@ -13,7 +13,8 @@
             "bold": true,
             "italic": false,
             "strike": false,
-            "alignment": "center"
+            "alignment": "center",
+            "color": "#000000"
         },
         {
             "type": "0",
@@ -23,7 +24,8 @@
             "bold": true,
             "italic": false,
             "strike": false,
-            "alignment": "left"
+            "alignment": "left",
+            "color": "#000000"
         },
         {
             "type": "1",
@@ -33,7 +35,8 @@
             "bold": false,
             "italic": false,
             "strike": false,
-            "line_spacing": 1.5
+            "line_spacing": 1.5,
+            "color": "#000000"
         },
         {
             "type": "0",
@@ -43,7 +46,8 @@
             "bold": true,
             "italic": false,
             "strike": false,
-            "alignment": "left"
+            "alignment": "left",
+            "color": "#000000"
         },
         {
             "type": "3",
@@ -56,10 +60,10 @@
             "columns": 2,
             "rows": 4,
             "tableCell": [
-                {"text": "我是第一个单元格,加粗，倾斜", "style": "", "bold": true, "italic": true},{"text": "02", "style": "", "bold": false, "italic": false},
-                {"text": "03", "style": "", "bold": false, "italic": false},{"text": "04", "style": "", "bold": false, "italic": false},
-                {"text": "05", "style": "", "bold": false, "italic": false},{"text": "06", "style": "", "bold": false, "italic": false},
-                {"text": "07", "style": "", "bold": false, "italic": false},{"text": "08", "style": "", "bold": false, "italic": false}
+                {"text": "我是第一个单元格,加粗，倾斜,红色", "style": "", "bold": true, "italic": true,"color": "#ff0000"},{"text": "02", "style": "", "bold": false, "italic": false,"color": "#000000"},
+                {"text": "03", "style": "", "bold": false, "italic": false,"color": "#000000"},{"text": "04", "style": "", "bold": false, "italic": false,"color": "#000000"},
+                {"text": "05", "style": "", "bold": false, "italic": false,"color": "#000000"},{"text": "06", "style": "", "bold": false, "italic": false,"color": "#000000"},
+                {"text": "07", "style": "", "bold": false, "italic": false,"color": "#000000"},{"text": "08", "style": "", "bold": false, "italic": false,"color": "#000000"}
             ]
         },
         {
@@ -70,7 +74,8 @@
             "bold": true,
             "italic": false,
             "strike": false,
-            "alignment": "left"
+            "alignment": "left",
+            "color": "#000000"
         },
         {
             "type": "2",
@@ -90,7 +95,8 @@
             "bold": true,
             "italic": false,
             "strike": false,
-            "alignment": "left"
+            "alignment": "left",
+            "color": "#000000"
         },
          {
             "type": "1",
@@ -100,7 +106,8 @@
             "bold": false,
             "italic": false,
             "strike": false,
-            "line_spacing": 1.5
+            "line_spacing": 1.5,
+            "color": "#000000"
         }
     ]
 }
