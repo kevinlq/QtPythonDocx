@@ -146,7 +146,6 @@ void MainWidget::onExportButtonClicked()
         QString savePath = m_pExportPathEdit->text();
 
         QVariantMap map;
-        map["title"] = m_pTitle->text();
         map["savePath"] = savePath;
         map["openFile"] = openFile;
         map["line_spacing"] = 1.5;
@@ -154,7 +153,7 @@ void MainWidget::onExportButtonClicked()
         map["footer"] = "测试生成页脚";
 
         QList<DS_ItemData*> contentList;
-        DS_ItemData *heading1 = new DS_ItemData("这个是 word 标题", "0", "", "center", true, false, false, 1);
+        DS_ItemData *heading1 = new DS_ItemData(m_pTitle->text(), "0", "", "center", true, false, false, 1);
         contentList << heading1;
 
         DS_ItemData *heading2 = new DS_ItemData("一.概述", "0", "", "left", true, false, false, 2);

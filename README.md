@@ -53,16 +53,20 @@
 
 在 `C++/Qt` 中读写 `word` 可选的方案不是很多，其中之前写过一篇文章总结过一些常用的方法，实际使用过程中发现那些方案并不能满足使用，不是效率问题就是某些电脑出现奔溃问题
 
-使用 `COM` 接口在某些电脑上如果没有安装 `Micro office` 会出现奔溃等异常问题，而且单次导出效率低，效果不理想，所以就有了这个想法，`Python` 现成的库非常好用，直接调用即可
+使用 `COM` 接口在某些电脑上如果没有安装 `Microsoft office` 会出现奔溃等异常问题，而且单次导出效率低，非常不理想，所以就有了本项目的一个想法
 
-`C++` 和 `Python` 交互使用 `JSON` 格式，详细内容可以看 `bin/test.json` 示例字段
+我们知道 `Python` 开源库非常多，而且非常容易上手，那么是否能够通过 `C++` 调用 `Python` 来实现导出 `word` 呢？答案是肯定的
 
+考虑到 word 内容较多，目前 `C++` 和 `Python` 交互使用 `JSON` 格式，这样定制化程度更高一些，详细内容可以看 `bin/test.json` 示例字段
+
+例子如下所示：
 
 ![mainWidget](/images/mainWidget.png)
 
 点击「导出」后，1s 内生成对应的 `Word` 文档，实际导出效果如下所示
 
 ![result](/images/word_result.png)
+
 
 ## 使用指南
 
@@ -72,6 +76,8 @@
 ```C++
 KPythonRunScript *pRunScript = KPythonRunScript::instance("wordOperate");
 ```
+
+这个类封装了调用 `Python` 的细节，使用者完全不用关系怎么调用的，只需要关注对应 `Python` 函数入参、出参即可
 
 > 其中有个比较注意的点：python 相关虚拟机全局只需要初始化一次即可，后续重复的脚本直接调用，补充每次初始化，否则会有一些异常奔溃信息(这也算是一个坑吧)
 
@@ -127,15 +133,13 @@ python: 310 64位
 
 ### 编译&&运行
 
-* 打开本项目源码，打开工程文件`QtPythonDocx.pro`,按照下图所示进行编译配置即可：
+* 打开本项目源码，打开工程文件`QtPythonDocx.pro`, 选择 `Release` 模式编译构建，等待编译完成即可看到示例界面，点击导出即可看到 `word` 内容正常导出而且自动打开生成的文档
 
-![编译配置](/images/build_setting.png)
+### 注意
 
-建议按照上述配置，添加宏定义`CONFIG+=MSVC64`
-
-`以下以 windows 平台为例`,其他平台以我博客为主进行配置
-
-具体针对不同平台编译宏定义不同，可以参考我这篇文章 [http://kevinlq.com/2017/09/18/Qt-black-technology/](http://kevinlq.com/2017/09/18/Qt-black-technology/)
+- 一定要注意自己使用库的版本和位数，`Qt` 64 位，那么对应的 `Python` 库也要用 `64`位
+- 明确自己程序运行系统，如果需要兼容 `Windows 7`，那么只能选择 `Python 3.8`版本
+- 如果发现执行效果不对，或者文档没有生成，很大概率是 `Python` 报错了，建议在终端调试下 `Python` 脚本，会有详细的异常提示
 
 
 ## 贡献指南
@@ -156,7 +160,7 @@ python: 310 64位
 
 #### <i class="fa fa-eye"></i> 若觉得对您有用,欢迎Star和Fork,可以关注公众号:
 
-![thanks](/screen/qrcode_for_devstone.png)
+![thanks](/images/qrcode_for_devstone.png)
 
 
 查看更多关于这个项目的贡献者，请阅读 [contributors](#)
@@ -168,9 +172,7 @@ python: 310 64位
 
 ## 致谢
 
-如果觉得分享的内容不错，可以请作者喝杯咖啡
-
-![thanks](/screen/myCode.png)
+如果觉得分享的内容不错，欢迎 `star` 支持，有任何问题欢迎提 `issues`.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
