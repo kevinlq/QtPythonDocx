@@ -25,3 +25,6 @@ HEADERS += \
     MainWidget.h
 
 LIBS += -L$${PYTHON_PATH}/libs -lpython310
+
+DISTFILES += \
+    bin/script/wordOperate.py

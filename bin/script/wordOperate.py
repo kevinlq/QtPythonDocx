@@ -99,11 +99,20 @@ def generateWord(strContent):
             # 表格处理,默认居中对齐
             nRows = itemData['rows']
             nColumns = itemData['columns']
+            mergeCells = itemData['mergeCells']
+
             table = document.add_table(rows=nRows, cols=nColumns, style ='Table Grid')
             table.style.font.size = Pt(globalStyleDictionary['fontSize'])
             table.style.font.name = globalStyleDictionary['fontName']
             table.style.font.color.rgb = globalStyleDictionary['fontColor']
             table.style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+            # 处理合并单元格场景
+            for index ,item in enumerate(mergeCells):
+                mergeBegin = item['begin']
+                mergeEnd = item['end']
+                if (isValidTableIndex(mergeBegin, nRows, nColumns) and isValidTableIndex(mergeEnd, nRows, nColumns) ):
+                    table.cell(mergeBegin[0], mergeBegin[1]).merge(table.cell(mergeEnd[0],mergeEnd[1]))
 
             tableCellArray = itemData['tableCell']
             for r in range(itemData['rows']):
@@ -117,7 +126,7 @@ def generateWord(strContent):
                     cell.text = tableCellArray[itemIndex]['text']
 
                     cellGraph = cell.paragraphs[0]
-                    cellGraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    cellGraph.alignment = converAlignment(tableCellArray[itemIndex]['alignment'])
                     cellGraph.add_run('')
                     cellRun = cellGraph.runs[0]                   
                     cellRun.font.bold = tableCellArray[itemIndex]['bold']
@@ -153,7 +162,17 @@ def hex_to_RGB(hex):
     b = int(hex[5:7], 16)
     return RGBColor(r, g, b)
 
+# 表格单元格索引非法判断
+def isValidTableIndex(cell, rows, columns):
+    if (len(cell) != 2):
+        return False
+    if (cell[0] < 0 or cell[0] > rows):
+        return False
+    if (cell[1] < 0 or cell[1] > columns):
+        return False
+    return True
+
 # 测试
-inputFile = open('test.json', encoding='utf-8')
+inputFile = open('./../test.json', encoding='utf-8')
 exportData = json.loads(inputFile.read())
 generateWord(json.dumps(exportData))
