@@ -173,6 +173,6 @@ def isValidTableIndex(cell, rows, columns):
     return True
 
 # 测试
-inputFile = open('./../test.json', encoding='utf-8')
-exportData = json.loads(inputFile.read())
-generateWord(json.dumps(exportData))
+#inputFile = open('./../test.json', encoding='utf-8')
+#exportData = json.loads(inputFile.read())
+#generateWord(json.dumps(exportData))
