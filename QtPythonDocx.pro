@@ -1,3 +1,5 @@
+TEMPLATE = subdirs
+
 include($$PWD/QtPythonDocx.pri)
 
 #version check qt
@@ -6,25 +8,8 @@ include($$PWD/QtPythonDocx.pri)
     error("Use at least Qt 5.11.0")
 }
 
-PYTHON_PATH=$$PWD/Python310
+SUBDIRS += \
+    $$PWD/src \
+    $$PWD/examples
 
-QT = core gui widgets
-
-TEMPLATE = app
-DESTDIR = $$IDE_APP_PATH
-
-INCLUDEPATH +=$${PYTHON_PATH}/include
-
-SOURCES += \
-    KPythonRunScript.cpp \
-    MainWidget.cpp \
-    main.cpp
-
-HEADERS += \
-    KPythonRunScript.h \
-    MainWidget.h
-
-LIBS += -L$${PYTHON_PATH}/libs -lpython310
-
-DISTFILES += \
-    bin/script/wordOperate.py
+CONFIG	+=ordered

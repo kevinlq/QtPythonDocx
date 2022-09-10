@@ -2,11 +2,12 @@
 
 
 #include <QVariantList>
+#include "KPYSDK_global.h"
 
 #pragma execution_character_set("UTF-8")
 
 class KPythonRunScriptImpl;
-class KPythonRunScript
+class KPYSDK_EXPORT KPythonRunScript
 {
     KPythonRunScript(const char *modelName);
 public:

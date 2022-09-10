@@ -1,5 +1,6 @@
 ﻿#include "MainWidget.h"
-#include "KPythonRunScript.h"
+
+#include "KPYSDK.h"
 
 #include <QDebug>
 #include <QVariantMap>
@@ -54,10 +55,26 @@ QVariantMap DS_ItemData::toVariantMap()
     return map;
 }
 
+struct DS_TableItem
+{
+    QVariantList beginCell;
+    QVariantList endCell;
+    QVariantMap toVariantMap();
+};
+
+QVariantMap DS_TableItem::toVariantMap()
+{
+    QVariantMap map;
+    map["begin"] = beginCell;
+    map["end"] = endCell;
+    return map;
+}
+
 struct DS_TableData : public DS_ItemData
 {
     int columns = 0;
     int rows = 0;
+    QList<DS_TableItem> mergeCells;     // 合并的单元格信息
     QList<DS_ItemData> cellItems;
 
     QVariantMap toVariantMap() override;
@@ -66,6 +83,13 @@ struct DS_TableData : public DS_ItemData
 QVariantMap DS_TableData::toVariantMap()
 {
     QVariantMap map = DS_ItemData::toVariantMap();
+
+    QVariantList mergeCellList;
+    for(int i = 0; i < mergeCells.size(); i++)
+    {
+        mergeCellList.push_back(mergeCells[i].toVariantMap());
+    }
+    map["mergeCells"] = mergeCellList;
 
     QVariantList tableCellList;
     for(int r = 0; r < rows; r++)
@@ -217,6 +241,62 @@ void MainWidget::onExportButtonClicked()
         }
 
         {
+            nRows = 4;
+            nColumns = 4;
+            strText = QString("下面演示表格如何合并单元格");
+            DS_ItemData *pTextTable = new DS_ItemData(strText, "1", "", "left", false, false, false, 3);
+            pTextTable->space_after = 15;
+            contentList << pTextTable;
+
+            DS_TableData *pTableData = new DS_TableData;
+            pTableData->type = "3";
+            pTableData->text = "";
+            pTableData->columns = nColumns;
+            pTableData->rows = nRows;
+
+            // 合并单元格 ，(0,0)~(0,1)
+            DS_TableItem mergeItem;
+            mergeItem.beginCell << 0 << 0;;
+            mergeItem.endCell << 0 << 1;
+            pTableData->mergeCells.push_back(mergeItem);
+
+            for(int r = 0; r < nRows; r++)
+            {
+                for(int c = 0; c < nColumns; c++)
+                {
+                    DS_ItemData itemData;
+                    itemData.bold = false;
+                    itemData.italic = false;
+                    itemData.level = 5;
+
+                    int index = r*nColumns + c;
+                    QString text = QString("单元格 %1").arg(index+1);
+
+                    if(index == 0)
+                    {
+                        text = QString("单元格 %1,加粗、倾斜、红色").arg(index+1);
+                        itemData.bold = true;
+                        itemData.italic = true;
+                        itemData.color = "#ff0000";
+                    }
+                    else if (index == 1)
+                    {
+                        // 由于00和01合并了，所以01样式、文本会覆盖00，这里进行测试
+                        text = QString("(0,0)和(0,1)单元格合并了，因此(0,1)会覆盖(0,2)单元格的文字以及样式，设置覆盖后的单元格样式为:加粗变蓝,左对齐").arg(index+1);
+                        itemData.bold = true;
+                        itemData.italic = false;
+                        itemData.color = "#0000ff";
+                        itemData.alignment = "left";
+                    }
+
+                    itemData.text = text;
+                    pTableData->cellItems.push_back(itemData);
+                }
+            }
+            contentList << pTableData;
+        }
+
+        {
             DS_ItemData *heading4 = new DS_ItemData("三.插入图片", "0", "", "left", true, false, false, 2);
             contentList << heading4;
             QString strText = QString("下面演示了如何插入图片，目前图片支持相对路径和绝对路劲，可以根据自己需要在json对应字段传入，如片大小支持手动设置，示例中写了固定值");
@@ -240,7 +320,11 @@ void MainWidget::onExportButtonClicked()
         map["content"] = tmpContentList;
         QJsonDocument doc = QJsonDocument::fromVariant(map);
 
-        args << QString(doc.toJson());
+        QString strJsonData = QString(doc.toJson());
+
+        qDebug() << strJsonData;
+
+        args << strJsonData;
 
         KPythonRunScript *pRunScript = KPythonRunScript::instance("wordOperate");
 
