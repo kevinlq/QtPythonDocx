@@ -42,13 +42,6 @@
 
 > Qt calls python to implement word read and write functions。 Qt 调用 python 实现 word读写功能
 
-**获取更多信息可以关注微信公众号：devstone**
-
-<div align=center>
-<img src="https://gitee.com/devstone/imageBed/raw/master/code/qrcode_for_devstone.png" width=20% height=20%/>
-
-<div align=left>
-
 ## 项目说明
 
 在 `C++/Qt` 中读写 `word` 可选的方案不是很多，其中之前写过一篇文章总结过一些常用的方法，实际使用过程中发现那些方案并不能满足使用，不是效率问题就是某些电脑出现奔溃问题
