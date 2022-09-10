@@ -1,120 +1,7 @@
 ﻿#include "MainWidget.h"
 
 #include "KPYSDK.h"
-
-#include <QDebug>
-#include <QVariantMap>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QDesktopServices>
-
-// 基本数据结构
-struct DS_ItemData
-{
-    DS_ItemData(){;}
-    DS_ItemData(const QString &strText, const QString &strType, const QString &strPicture,
-                const QString &strAlignment, bool bBold, bool bItalic, bool bStrike, int nLevel);
-
-    QString text = "";
-    QString type = "0";
-    QString picture = "";
-    QString alignment = "left";
-    QString color = "#000000";
-    bool bold = false;
-    bool italic = false;
-    bool strike = false;
-    int level = 5;
-    double space_after = 15;
-    double space_before = 15;
-
-    virtual QVariantMap toVariantMap();
-};
-
-DS_ItemData::DS_ItemData(const QString &strText, const QString &strType, const QString &strPicture,
-                         const QString &strAlignment, bool bBold, bool bItalic, bool bStrike, int nLevel)
-    : text(strText), type(strType), picture(strPicture), alignment(strAlignment), bold(bBold)
-    , italic(bItalic), strike(bStrike), level(nLevel)
-{
-}
-
-QVariantMap DS_ItemData::toVariantMap()
-{
-    QVariantMap map;
-    map["type"] = type;
-    map["text"] = text;
-    map["level"] = level;
-    map["bold"] = bold;
-    map["italic"] = italic;
-    map["strike"] = strike;
-    map["alignment"] = alignment;
-    map["color"]    = color;
-    map["picture"] = picture;
-    map["space_after"] = space_after;
-    map["space_after"] = space_after;
-
-    return map;
-}
-
-struct DS_TableItem
-{
-    QVariantList beginCell;
-    QVariantList endCell;
-    QVariantMap toVariantMap();
-};
-
-QVariantMap DS_TableItem::toVariantMap()
-{
-    QVariantMap map;
-    map["begin"] = beginCell;
-    map["end"] = endCell;
-    return map;
-}
-
-struct DS_TableData : public DS_ItemData
-{
-    int columns = 0;
-    int rows = 0;
-    QList<DS_TableItem> mergeCells;     // 合并的单元格信息
-    QList<DS_ItemData> cellItems;
-
-    QVariantMap toVariantMap() override;
-};
-
-QVariantMap DS_TableData::toVariantMap()
-{
-    QVariantMap map = DS_ItemData::toVariantMap();
-
-    QVariantList mergeCellList;
-    for(int i = 0; i < mergeCells.size(); i++)
-    {
-        mergeCellList.push_back(mergeCells[i].toVariantMap());
-    }
-    map["mergeCells"] = mergeCellList;
-
-    QVariantList tableCellList;
-    for(int r = 0; r < rows; r++)
-    {
-        for(int c = 0; c < columns; c++)
-        {
-            int index = r*columns + c;
-
-            if(index >= cellItems.size())
-            {
-                qWarning() << "index outof range.." << index << cellItems.size();
-                continue;
-            }
-
-            QVariantMap itemMap = cellItems[index].toVariantMap();
-            tableCellList << itemMap;
-        }
-    }
-
-    map["columns"]      = columns;
-    map["rows"]         = rows;
-    map["tableCell"]    = tableCellList;
-
-    return map;
-}
+#include "WordItemData.h"
 
 MainWidget::MainWidget(QWidget *parent)
     : QWidget{parent}
@@ -184,6 +71,8 @@ void MainWidget::onExportButtonClicked()
         map["line_spacing"] = 1.5;
         map["header"] = "测试生成页眉";
         map["footer"] = "测试生成页脚";
+        map["fontSize"] = 13;
+        map["fontName"] = u"仿宋";
 
         QList<DS_ItemData*> contentList;
         DS_ItemData *heading1 = new DS_ItemData(m_pTitle->text(), "0", "", "center", true, false, false, 1);
@@ -193,6 +82,7 @@ void MainWidget::onExportButtonClicked()
         contentList << heading2;
 
         DS_ItemData *pText1 = new DS_ItemData(m_pText1->toPlainText(), "1", "", "left", false, false, false, 3);
+        pText1->first_line_indent = 2;
         contentList << pText1;
 
         DS_ItemData *heading3 = new DS_ItemData("二.插入表格", "0", "", "left", true, false, false, 2);
@@ -204,6 +94,7 @@ void MainWidget::onExportButtonClicked()
         QString strText = QString("下面演示创建%1行%2列表格，每个单元格样式都可以自定义，只需要配置具体样式即可").arg(nRows).arg(nColumns);
         {
             DS_ItemData *pTextTable = new DS_ItemData(strText, "1", "", "left", false, false, false, 3);
+            pTextTable->first_line_indent = 2;
             pTextTable->space_after = 5;
             contentList << pTextTable;
 
@@ -221,6 +112,7 @@ void MainWidget::onExportButtonClicked()
                     itemData.bold = false;
                     itemData.italic = false;
                     itemData.level = 5;
+                    itemData.alignment = "center";
 
                     int index = r*nColumns + c;
                     QString text = QString("单元格 %1").arg(index+1);
@@ -301,6 +193,7 @@ void MainWidget::onExportButtonClicked()
             contentList << heading4;
             QString strText = QString("下面演示了如何插入图片，目前图片支持相对路径和绝对路劲，可以根据自己需要在json对应字段传入，如片大小支持手动设置，示例中写了固定值");
             DS_ItemData *pText = new DS_ItemData(strText, "1", "", "left", false, false, false, 3);
+            pText->first_line_indent = 2;
             contentList << pText;
             DS_ItemData *pictureItem = new DS_ItemData("", "2", "title.png", "left", false, false, false, 2);
             contentList << pictureItem;
@@ -309,6 +202,7 @@ void MainWidget::onExportButtonClicked()
         DS_ItemData *heading5 = new DS_ItemData("四.总结", "0", "", "left", true, false, false, 2);
         contentList << heading5;
         DS_ItemData *pText2 = new DS_ItemData(m_pText2->toPlainText(), "1", "", "left", false, false, false, 3);
+        pText2->first_line_indent = 2;
         contentList << pText2;
 
         QVariantList tmpContentList;
@@ -322,7 +216,7 @@ void MainWidget::onExportButtonClicked()
 
         QString strJsonData = QString(doc.toJson());
 
-        qDebug() << strJsonData;
+        //qDebug() << strJsonData;
 
         args << strJsonData;
 
@@ -346,11 +240,6 @@ void MainWidget::onExportButtonClicked()
         {
             qWarning() << "write word fail.....";
             return;
-        }
-
-        if(openFile)
-        {
-            //QDesktopServices::openUrl(QString("file:///%1").arg(savePath));
         }
     }
 }

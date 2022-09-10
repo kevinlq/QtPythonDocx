@@ -9,9 +9,11 @@ INCLUDEPATH +=$$PWD/../src/
 
 SOURCES += \
     MainWidget.cpp \
+    WordItemData.cpp \
     main.cpp
 
 HEADERS += \
-    MainWidget.h
+    MainWidget.h \
+    WordItemData.h
 
 LIBS += -L$${IDE_APP_PATH}/ -lPYSDK$${FILE_POSTFIX}

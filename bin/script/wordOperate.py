@@ -4,6 +4,7 @@ import json
 import os
 from docx import Document   #用来建立一个word对象
 from docx.shared import Pt  #用来设置字体的大小
+from docx.shared import Cm 
 from docx.shared import Inches
 from docx.oxml.ns import qn  #设置字体
 from docx.shared import RGBColor  #设置字体的颜色
@@ -29,6 +30,11 @@ def generateWord(strContent):
         'space_before': 15,     # 段前
         'space_after': 15       # 断后间距
     }
+
+    globalStyleDictionary['fontName'] = (jsonData['fontName'])
+    globalStyleDictionary['fontSize'] = jsonData['fontSize']
+
+    print('code:', type(globalStyleDictionary['fontName'] ))
 
     document = Document()
     document.styles['Normal'].font.name = globalStyleDictionary['fontName']
@@ -68,14 +74,15 @@ def generateWord(strContent):
         elif itemData['type'] == '1':
             # 普通文本处理
             #document.add_paragraph('')
-            paragraph = document.add_paragraph(itemData['text'])
+            paragraph = document.add_paragraph('')
+            paragraphRun = paragraph.add_run(itemData['text'])
 
             if('line_spacing' in itemData.keys()):
                 line_spacing = itemData['line_spacing']
 
             # 下面的代码是为了首行缩进 2 字符
             paragraph.style.font.size = Pt(globalStyleDictionary['fontSize'])
-            paragraph.paragraph_format.first_line_indent = paragraph.style.font.size * 2
+            paragraph.paragraph_format.first_line_indent = paragraph.style.font.size * itemData['first_line_indent']
 
             # 设置段前段后间距信息
             space_before = globalStyleDictionary['space_before']
@@ -89,6 +96,9 @@ def generateWord(strContent):
             paragraph.paragraph_format.line_spacing = line_spacing
             paragraph.paragraph_format.space_before  = Pt(space_before)  # 段前
             paragraph.paragraph_format.space_after = Pt(space_after)     # 段后
+            paragraph.alignment = converAlignment(itemData['alignment'])
+            paragraphRun.font.bold = itemData['bold']
+            paragraphRun.font.italic = itemData['italic']
         elif itemData['type'] == '2':
             # 图片处理
             document.add_paragraph('')
@@ -116,6 +126,7 @@ def generateWord(strContent):
 
             tableCellArray = itemData['tableCell']
             for r in range(itemData['rows']):
+                table.rows[r].height = Cm(itemData['height'])
                 for c in range(itemData['columns']):
                     cell = table.cell(r, c)
                     itemIndex = r*nColumns + c
@@ -124,6 +135,7 @@ def generateWord(strContent):
                         continue
 
                     cell.text = tableCellArray[itemIndex]['text']
+                    cell.vertical_alignment = converAlignment(tableCellArray[itemIndex]['vertical_alignment'])
 
                     cellGraph = cell.paragraphs[0]
                     cellGraph.alignment = converAlignment(tableCellArray[itemIndex]['alignment'])
@@ -173,6 +185,6 @@ def isValidTableIndex(cell, rows, columns):
     return True
 
 # 测试
-#inputFile = open('./../../doc/test.json', encoding='utf-8')
-#exportData = json.loads(inputFile.read())
-#generateWord(json.dumps(exportData))
+inputFile = open('./../../doc/test.json', encoding='utf-8')
+exportData = json.loads(inputFile.read())
+generateWord(json.dumps(exportData))

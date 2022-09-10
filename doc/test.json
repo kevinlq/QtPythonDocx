@@ -4,6 +4,8 @@
     "line_spacing": 1.5,
     "header": "这是页眉",
     "footer": "这是页脚",
+    "fontSize": 14,
+    "fontName": "仿宋",
     "content": [
         {
             "type": "0",
@@ -14,6 +16,8 @@
             "italic": false,
             "strike": false,
             "alignment": "center",
+            "vertical_alignment": "center",
+            "first_line_indent": 0,
             "color": "#000000"
         },
         {
@@ -25,6 +29,8 @@
             "italic": false,
             "strike": false,
             "alignment": "left",
+            "vertical_alignment": "center",
+            "first_line_indent": 0,
             "color": "#000000"
         },
         {
@@ -36,6 +42,9 @@
             "italic": false,
             "strike": false,
             "line_spacing": 1.5,
+            "alignment": "left",
+            "vertical_alignment": "center",
+            "first_line_indent": 2,
             "color": "#000000"
         },
         {
@@ -47,6 +56,8 @@
             "italic": false,
             "strike": false,
             "alignment": "left",
+            "vertical_alignment": "center",
+            "first_line_indent": 0,
             "color": "#000000"
         },
         {
@@ -57,20 +68,24 @@
             "bold": false,
             "italic": false,
             "strike": false,
+            "alignment": "left",
+            "vertical_alignment": "center",
+            "first_line_indent": 0,
             "columns": 2,
             "rows": 4,
+            "height": 1.2,
             "mergeCells": [
                 {"begin": [0,0], "end": [0,1]}
             ],
             "tableCell": [
-                {"text": "我是第一个单元格,加粗，倾斜,红色", "style": "", "bold": true, "italic": true,"color": "#ff0000","alignment": "center"},
-                {"text": "00和01合并了，02会覆盖01的值，加粗变红,左对齐", "style": "", "bold": true, "italic": false,"color": "#ff0000","alignment": "left"},
-                {"text": "03", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center"},
-                {"text": "04", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center"},
-                {"text": "05", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center"},
-                {"text": "06", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center"},
-                {"text": "07", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center"},
-                {"text": "08", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center"}
+                {"text": "我是第一个单元格,加粗，倾斜,红色", "style": "", "bold": true, "italic": true,"color": "#ff0000","alignment": "center","vertical_alignment": "center"},
+                {"text": "00和01合并了，02会覆盖01的值，加粗变红,左对齐", "style": "", "bold": true, "italic": false,"color": "#ff0000","alignment": "left","vertical_alignment": "center"},
+                {"text": "03", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center","vertical_alignment": "center"},
+                {"text": "04", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center","vertical_alignment": "center"},
+                {"text": "05", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center","vertical_alignment": "center"},
+                {"text": "06", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center","vertical_alignment": "center"},
+                {"text": "07", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center","vertical_alignment": "center"},
+                {"text": "08", "style": "", "bold": false, "italic": false,"color": "#000000","alignment": "center","vertical_alignment": "center"}
             ]
         },
         {
@@ -92,6 +107,7 @@
             "bold": false,
             "italic": false,
             "strike": false,
+            "alignment": "left",
             "picture": "D:/title.jpg"
         },
         {
@@ -103,6 +119,8 @@
             "italic": false,
             "strike": false,
             "alignment": "left",
+            "vertical_alignment": "center",
+            "first_line_indent": 0,
             "color": "#000000"
         },
          {
@@ -114,6 +132,9 @@
             "italic": false,
             "strike": false,
             "line_spacing": 1.5,
+            "alignment": "left",
+            "vertical_alignment": "center",
+            "first_line_indent": 2,
             "color": "#000000"
         }
     ]
