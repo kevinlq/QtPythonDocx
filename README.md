@@ -77,7 +77,7 @@
 KPythonRunScript *pRunScript = KPythonRunScript::instance("wordOperate");
 ```
 
-这个类封装了调用 `Python` 的细节，使用者完全不用关系怎么调用的，只需要关注对应 `Python` 函数入参、出参即可
+这个类封装了调用 `Python` 的细节，使用者完全不用关心怎么调用的，只需要关注对应 `Python` 函数入参、出参即可
 
 > 其中有个比较注意的点：python 相关虚拟机全局只需要初始化一次即可，后续重复的脚本直接调用，补充每次初始化，否则会有一些异常奔溃信息(这也算是一个坑吧)
 
