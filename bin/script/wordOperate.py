@@ -31,10 +31,10 @@ def generateWord(strContent):
         'space_after': 15       # 断后间距
     }
 
-    globalStyleDictionary['fontName'] = (jsonData['fontName'])
+    globalStyleDictionary['fontName'] = jsonData['fontName']
     globalStyleDictionary['fontSize'] = jsonData['fontSize']
 
-    print('code:', type(globalStyleDictionary['fontName'] ))
+    #print('code:', type(globalStyleDictionary['fontName'] ))
 
     document = Document()
     document.styles['Normal'].font.name = globalStyleDictionary['fontName']
@@ -185,6 +185,6 @@ def isValidTableIndex(cell, rows, columns):
     return True
 
 # 测试
-inputFile = open('./../../doc/test.json', encoding='utf-8')
-exportData = json.loads(inputFile.read())
-generateWord(json.dumps(exportData))
+#inputFile = open('test.json', encoding='utf-8')
+#exportData = json.loads(inputFile.read())
+#generateWord(json.dumps(exportData))
