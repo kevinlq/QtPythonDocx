@@ -31,11 +31,12 @@ KPythonRunScriptImpl::~KPythonRunScriptImpl()
 {
     qDebug() << "~KPythonRunScriptImpl";
     Py_Finalize();
+    m_pModule = nullptr;
 }
 
 bool KPythonRunScriptImpl::initPyData(const char *modelName)
 {
-    QString pyHomePath = QCoreApplication::applicationDirPath() + "/Python310";
+    QString pyHomePath = QCoreApplication::applicationDirPath() + "/python310";
     Py_SetPythonHome(reinterpret_cast<const wchar_t *>(pyHomePath.utf16()));
 
     // 初始化python环境
@@ -184,6 +185,11 @@ bool KPythonRunScript::callFun(const char *funcName, const QVariantList &args, Q
     default:
         break;
     }
+
+    Py_CLEAR(pFunObj);
+    Py_CLEAR(pArgsObj);
+    Py_CLEAR(pReturnObj);
+    PyGC_Collect();
 
     return true;
 }

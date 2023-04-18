@@ -72,7 +72,7 @@ void MainWidget::onExportButtonClicked()
         map["header"] = "测试生成页眉";
         map["footer"] = "测试生成页脚";
         map["fontSize"] = 13;
-        map["fontName"] = u"仿宋";
+        map["fontName"] = "仿宋";
 
         QList<DS_ItemData*> contentList;
         DS_ItemData *heading1 = new DS_ItemData(m_pTitle->text(), "0", "", "center", true, false, false, 1);
@@ -174,7 +174,7 @@ void MainWidget::onExportButtonClicked()
                     else if (index == 1)
                     {
                         // 由于00和01合并了，所以01样式、文本会覆盖00，这里进行测试
-                        text = QString("(0,0)和(0,1)单元格合并了，因此(0,1)会覆盖(0,2)单元格的文字以及样式，设置覆盖后的单元格样式为:加粗变蓝,左对齐").arg(index+1);
+                        text = QString("(0,0)和(0,1)单元格合并了，因此(0,1)会覆盖(0,2)单元格的文字以及样式，设置覆盖后的单元格样式为:加粗变蓝,左对齐 %1").arg(index+1);
                         itemData.bold = true;
                         itemData.italic = false;
                         itemData.color = "#0000ff";
