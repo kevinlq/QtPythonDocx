@@ -15,8 +15,8 @@ public:
     ~KPythonRunScript();
 
     bool callFun(const char *funcName,
-                 const QVariantList &args = QVariantList(),
-                 QVariant &returnValue = QVariant(QVariant::Invalid));
+                 const QVariantList &args,
+                 QVariant &returnValue);
 
 private:
     KPythonRunScriptImpl *m_pImple;
